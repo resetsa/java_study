@@ -19,6 +19,13 @@ public class FindArrowTest {
         count = findArrow.findCountArrow(input);
         assert count == 3 : "Expected 3 arrows, but got " + count;
 
+        input = ">>-->>>>-->>....>>-->>00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
+        try {
+            findArrow.findCountArrow(input);
+        } catch (IllegalArgumentException e) {
+            assert e.getMessage().equals("Input exceeds maximum length of 106");
+        }
+
         // Test with an empty string
         try {
             findArrow.findCountArrow("");
