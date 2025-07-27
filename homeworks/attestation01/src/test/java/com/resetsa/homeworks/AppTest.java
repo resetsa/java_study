@@ -40,6 +40,18 @@ public class AppTest {
     }
 
     @Test
+    @DisplayName("ParsePersons Неверный формат")
+    public void testParsePersons_delim_wrong_format() {
+        String[] input = new String[]{"alice = bob = 0","bob = 100"};
+        var app = new App();
+
+        IllegalArgumentException exp = assertThrows(IllegalArgumentException.class, () -> {
+            app.parsePersons(input, "=");
+        });
+        assert exp.getMessage().contains("Неверный формат");
+    }
+
+    @Test
     @DisplayName("ParsePersons Значение не число")
     public void testParsePersons_cash_not_digit() {
         String[] input = new String[]{"alice = aa","bob = 100"};
@@ -87,6 +99,18 @@ public class AppTest {
             app.parseProducts(input, "");
         });
         assert exp.getMessage().contains("Разделитель полей не может быть пустым");
+    }
+
+    @Test
+    @DisplayName("ParseProducts Неверный формат")
+    public void testParseProducts_delim_wrong_format() {
+        String[] input = new String[]{"beer = apple = 10","apple = 100"};
+        var app = new App();
+
+        IllegalArgumentException exp = assertThrows(IllegalArgumentException.class, () -> {
+            app.parseProducts(input, "=");
+        });
+        assert exp.getMessage().contains("Неверный формат");
     }
 
     @Test
