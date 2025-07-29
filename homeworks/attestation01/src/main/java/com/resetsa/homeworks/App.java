@@ -87,7 +87,7 @@ public class App {
         try {
             persons = parsePersons(personDescriptions, FIELD_DELIMETER);
         } catch (IllegalArgumentException e) {
-            System.out.println("Ошибка: " + e.getMessage());
+            System.out.println(e.getMessage());
             return null;
         }
         return persons;
@@ -133,7 +133,7 @@ public class App {
                 
                 System.out.println(person.getName() + " купил " + product.getName());
             } catch (IllegalArgumentException e) {
-                System.out.println("Ошибка: " + e.getMessage());
+                System.out.println(e.getMessage());
             }
             finally {
                 // System.out.println(persons);
