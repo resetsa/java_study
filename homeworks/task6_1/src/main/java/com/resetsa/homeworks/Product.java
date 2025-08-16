@@ -2,6 +2,7 @@ package com.resetsa.homeworks;
 
 
 public class Product {
+    public static final String NOT_ALLOW_MASK= "^[0-9]+$";
     private String name;
     private int price;
 
@@ -21,6 +22,9 @@ public class Product {
     private void checkName(String name) throws IllegalArgumentException {
         if (name == null || name.isEmpty()) {
             throw new IllegalArgumentException("Имя продукта не может быть пустым");
+        }
+        if (name.matches(NOT_ALLOW_MASK)) {
+            throw new IllegalArgumentException("Имя продукта не может состоять только из цифр");
         }
     }
 

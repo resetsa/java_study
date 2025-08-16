@@ -25,6 +25,15 @@ public class ProductTest {
     }
 
     @Test
+    @DisplayName("Тест создания продукта с именем, состоящим только из цифр")
+    public void testSetName_invalid_name() {
+        IllegalArgumentException exp = assertThrows(IllegalArgumentException.class, () -> {
+            new Product("123", 100);
+        });
+        assert exp.getMessage().contains("Имя продукта не может состоять только из цифр");
+    }
+
+    @Test
     @DisplayName("Тест создания продукта с отрицательной ценой")
     public void testSetPriceName_invalid() {
         IllegalArgumentException exp = assertThrows(IllegalArgumentException.class, () -> {
