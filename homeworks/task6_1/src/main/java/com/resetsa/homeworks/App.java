@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 
 public class App {
     private final String EXIT_COMMAND = "end";
@@ -12,6 +14,23 @@ public class App {
     private final String FIELD_DELIMETER = "=";
     private final String PERSON_PURCHASE_DELIMETER = "-";
     private final String PURCHASE_DELIMETER = ",";
+
+    private final LocalDate processDate;
+
+    public App() {
+        this.processDate = LocalDate.now();
+    }
+
+    public App(LocalDate processDate) {
+        if (processDate == null) {
+            throw new IllegalArgumentException("Дата не может быть null");
+        }
+        this.processDate = processDate;
+    }
+
+    public LocalDate getProcessDate() {
+        return processDate;
+    }
 
     public HashMap<String,Person> parsePersons(String[] personDescriptions, String delimField) {
         HashMap<String,Person> persons = new HashMap<>();
@@ -35,24 +54,34 @@ public class App {
         return persons;
     }
 
-    public HashMap<String,Product> parseProducts(String[] productDescriptions, String delimField) {
-        HashMap<String,Product> products = new HashMap<>();
+    public HashMap<String,InterfaceProduct> parseProducts(String[] productDescriptions, String delimField) {
+        HashMap<String,InterfaceProduct> products = new HashMap<>();
         if (delimField == "" || delimField.isEmpty()) {
             throw new IllegalArgumentException("Разделитель полей не может быть пустым");
         }
         for (String description : productDescriptions) {
             String[] parts = description.split(delimField);
-            if (parts.length != 2) {
-                throw new IllegalArgumentException("Неверный формат: " + description);
-            }
-            String name = parts[0].trim();
-            int price;
             try {
-                price = Integer.parseInt(parts[1].trim());
-                products.put(name, new Product(name, price));
+                if (parts.length == 2) {
+                    var name = parts[0].trim();
+                    var price = Integer.parseInt(parts[1].trim());
+                    products.put(name, new Product(name, price));
+                    continue;
+                }
+                if (parts.length == 4) {
+                    var name = parts[0].trim();
+                    var price = Integer.parseInt(parts[1].trim());
+                    var discount = Integer.parseInt(parts[2].trim());
+                    var discountDate = LocalDate.parse(parts[3].trim());
+                    products.put(name, new DiscountProduct(name, price, discount, discountDate));
+                    continue;
+                }
             } catch (NumberFormatException e) {
-                throw new IllegalArgumentException("Введено не число " + name + ": " + parts[1]);
+                throw new IllegalArgumentException("Введено не число в строке: " + description);
+            } catch (DateTimeParseException e) {
+                throw new IllegalArgumentException("Неверный формат даты в строке: " + description);
             }
+            throw new IllegalArgumentException("Неверный формат: " + description);
         }
         return products;
     }
@@ -65,9 +94,10 @@ public class App {
     }
     public ArrayList<String> genReport(HashMap<String,Person> persons, String personOrderDelim, String orderDelim) {
         ArrayList<String> result = new ArrayList<>();
+        result.add(String.format("Отчет на %s%n", processDate));
         for ( Map.Entry<String,Person> person : persons.entrySet()) {
             ArrayList<String> nameOrders = new ArrayList<>();
-            for (Product order : person.getValue().getBucket()) {
+            for (var order : person.getValue().getBucket()) {
                 nameOrders.add(order.getName());
             }
             String listOrderNames = new String("Ничего не куплено");
@@ -93,10 +123,11 @@ public class App {
         return persons;
     }
 
-    public HashMap<String,Product> initProduct(Scanner scanner) {
-        HashMap<String,Product> products = new HashMap<>();
+    public HashMap<String,InterfaceProduct> initProduct(Scanner scanner) {
+        HashMap<String,InterfaceProduct> products = new HashMap<>();
         System.out.println("Введите строку описания продуктов");
-        System.out.printf("Формат: имя1%sцена1%sимя2=цена2%n", FIELD_DELIMETER, PRODUCT_DELIMITER);
+        System.out.printf("Формат: имя1%sцена%sимя2=цена2%n", FIELD_DELIMETER, PRODUCT_DELIMITER);
+        System.out.printf("Формат: имя1%sцена%sскидка%sдата_окончания%sимя2=цена2%n", FIELD_DELIMETER, FIELD_DELIMETER, FIELD_DELIMETER, PRODUCT_DELIMITER);
         String[] productDescriptions = scanner.nextLine().split(PRODUCT_DELIMITER);
         try {
             products = parseProducts(productDescriptions, FIELD_DELIMETER);
@@ -107,7 +138,7 @@ public class App {
         return products;
     }
 
-    public void run(Scanner scanner, HashMap<String,Person> persons, HashMap<String,Product> products) {
+    public void run(Scanner scanner, HashMap<String,Person> persons, HashMap<String,InterfaceProduct> products) {
         System.out.println("Введите имя покупателя и имя продукта");
         System.out.printf("Формат: имя покупателя%sимя продукта%n", PERSON_PURCHASE_DELIMETER);
         System.out.println("Для выхода введите end");

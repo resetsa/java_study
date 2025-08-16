@@ -1,7 +1,7 @@
 package com.resetsa.homeworks;
 
 
-public class Product {
+public class Product implements InterfaceProduct {
     public static final String NOT_ALLOW_MASK= "^[0-9]+$";
     private String name;
     private int price;

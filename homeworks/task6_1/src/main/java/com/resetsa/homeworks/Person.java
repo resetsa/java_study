@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Person {
     private String name;
     private int cash;
-    private ArrayList<Product> bucket = new ArrayList<>();
+    private ArrayList<InterfaceProduct> bucket = new ArrayList<>();
     public Person(String name, int cash) throws IllegalArgumentException {
         checkName(name);
         checkCash(cash);
@@ -47,7 +47,7 @@ public class Person {
         this.cash = cash;
     }
 
-    public ArrayList<Product> getBucket() {
+    public ArrayList<InterfaceProduct> getBucket() {
         return bucket;
     }
 
@@ -90,7 +90,7 @@ public class Person {
         return true;
     }
 
-    public void addToBucket(Product product) throws IllegalArgumentException {
+    public void addToBucket(InterfaceProduct product) throws IllegalArgumentException {
         if (product == null) {
             throw new IllegalArgumentException("Продукт не может быть null");
         }
