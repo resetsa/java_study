@@ -63,7 +63,7 @@ public class CarsRepositoryImpl implements CarsRepository {
 
     @Override
     public CarsRepositoryImpl getUnique() {
-        var uniq=cars.stream().collect(Collectors.toList());
+        var uniq=cars.stream().collect(Collectors.toSet());
         return new CarsRepositoryImpl(uniq.stream().collect(Collectors.toList()));
     }
 

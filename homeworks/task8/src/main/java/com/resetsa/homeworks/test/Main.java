@@ -3,7 +3,6 @@ package com.resetsa.homeworks.test;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.stream.Collectors;
 
 public class Main {
     private static final String filePath = "homeworks/task8/src/main/java/com/resetsa/homeworks/data/car.txt";
@@ -20,9 +19,7 @@ public class Main {
             System.out.println("All cars:");
             repository.printCars();
             System.out.println("Black cars or new cars IDs:");
-            blackOrNew.getCars().stream()
-                .collect(Collectors.toSet()).
-                forEach(car -> System.out.println(car.getId()));
+            blackOrNew.getUnique().getCars().stream().forEach(car -> System.out.println(car.getId()));
             System.out.printf("Unique model number between %d and %d: %d\n", 700_000,800_000,uniqueCars.getCars().size());
             System.out.printf("Color min price: %s\n", sortByPrice.getCars().get(0).getColor());
             System.out.printf("Average price for %s: %.2f\n", "Toyota", modelTAverage);
