@@ -3,13 +3,15 @@ package com.resetsa.homeworks.test;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import com.resetsa.homeworks.repository.CarsLoaderCSV;
+import com.resetsa.homeworks.repository.CarsRepositoryImpl;
 
 public class Main {
     private static final String filePath = "homeworks/task8/src/main/java/com/resetsa/homeworks/data/car.txt";
     public static void main(String[] args) {
         try (InputStream inputStream = new FileInputStream(filePath)) {
-            var loader = new com.resetsa.homeworks.repository.CarsLoaderCSV();
-            var repository = new com.resetsa.homeworks.repository.CarsRepositoryImpl(loader, inputStream);
+            var loader = new CarsLoaderCSV();
+            var repository = new CarsRepositoryImpl(loader, inputStream);
             var blackOrNew = repository.getByColor("Black");
             blackOrNew.extendCars(repository.getByMileage(0).getCars());
             var uniqueCars = repository.getByPrice(700_000, 800_000).getUnique();
