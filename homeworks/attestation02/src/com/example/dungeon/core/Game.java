@@ -68,7 +68,28 @@ public class Game {
             optItem.get().apply(ctx);
         });
         commands.put("fight", (ctx, a) -> {
-            throw new InvalidCommandException("TODO-5: реализуйте бой");
+            var monster = ctx.getCurrent().getMonster();
+            var player = ctx.getPlayer();
+            if (monster == null) {
+                throw new InvalidCommandException("В комнате нет монстра");
+            }
+            monster.setHp(monster.getHp()-player.getAttack());
+            player.setHp(player.getHp()-monster.getLevel());
+            if (monster.getHp() <= 0) {
+                System.out.printf("Монстр %s побежден!%n", monster.getName());
+                ctx.getCurrent().setMonster(null);
+            }
+            else {
+                System.out.printf("Вы бьёте %s на %d. HP монстра: %d%n", monster.getName(),player.getAttack(), monster.getHp());
+            }
+            if (player.getHp() <= 0) {
+                System.out.println("Игрок побежден!%n");
+                System.out.println("Пока!");
+                System.exit(0);
+            }
+            else {
+                System.out.printf("%s отвечает на %d. Ваше HP: %d%n",monster.getName(), monster.getLevel(),player.getHp());
+            }
         });
         commands.put("save", (ctx, a) -> SaveLoad.save(ctx));
         commands.put("load", (ctx, a) -> SaveLoad.load(ctx));
