@@ -6,7 +6,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class Game {
@@ -107,13 +106,19 @@ public class Game {
         Room square = new Room("Площадь", "Каменная площадь с фонтаном.");
         Room forest = new Room("Лес", "Шелест листвы и птичий щебет.");
         Room cave = new Room("Пещера", "Темно и сыро.");
+        Room beach = new Room("Пляж", "Море и птички");
         square.getNeighbors().put("north", forest);
+        square.getNeighbors().put("south", beach);
         forest.getNeighbors().put("south", square);
         forest.getNeighbors().put("east", cave);
         cave.getNeighbors().put("west", forest);
 
         forest.getItems().add(new Potion("Малое зелье", 5));
         forest.setMonster(new Monster("Волк", 1, 8));
+
+        beach.getItems().add(new Potion("Напиток", 10));
+        beach.getItems().add(new Potion("Кола", 5));
+        beach.getItems().add(new Weapon("Ружье", 10));
 
         state.setCurrent(square);
     }
