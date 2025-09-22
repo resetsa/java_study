@@ -6,6 +6,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 public class Game {
     private final GameState state = new GameState();
@@ -37,7 +39,15 @@ public class Game {
             ctx.setCurrent(nextRoom);
         });
         commands.put("take", (ctx, a) -> {
-            throw new InvalidCommandException("TODO-2: реализуйте взятие предмета");
+            var itemName = a.getFirst().strip();
+            var items = ctx.getCurrent().getItems().stream()
+                .filter(i -> i.getName().equals(itemName))
+                .collect(Collectors.toList());
+            if (items.isEmpty()) {
+                throw new InvalidCommandException(String.format("В комнате нет предмета %s", itemName));
+            }
+            ctx.getPlayer().addItems(items);
+            ctx.getCurrent().removeItems(items);
         });
         commands.put("inventory", (ctx, a) -> {
             System.out.println("TODO-3: вывести инвентарь (Streams)");
@@ -84,7 +94,7 @@ public class Game {
                 if (line == null) break;
                 line = line.trim();
                 if (line.isEmpty()) continue;
-                List<String> parts = Arrays.asList(line.split("\s+"));
+                List<String> parts = Arrays.asList(line.split("\s+",2));
                 String cmd = parts.getFirst().toLowerCase(Locale.ROOT);
                 List<String> args = parts.subList(1, parts.size());
                 Command c = commands.get(cmd);

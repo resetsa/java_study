@@ -22,4 +22,8 @@ public class Player extends Entity {
     public List<Item> getInventory() {
         return inventory;
     }
+
+    public void addItems(List<Item> items) {
+        this.inventory.addAll(items);
+    }
 }

@@ -26,6 +26,10 @@ public class Room {
         return items;
     }
 
+    public void removeItems(List<Item> items) {
+        this.items.removeAll(items);
+    }
+
     public Monster getMonster() {
         return monster;
     }
