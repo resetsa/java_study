@@ -29,7 +29,12 @@ public class Game {
         });
         commands.put("look", (ctx, a) -> System.out.println(ctx.getCurrent().describe()));
         commands.put("move", (ctx, a) -> {
-            throw new InvalidCommandException("TODO-1: реализуйте перемещение игрока");
+            String direction = a.getFirst();
+            Room nextRoom = ctx.getCurrent().getNeighbors().get(direction);
+            if (nextRoom == null) {
+                throw new InvalidCommandException(String.format("В направление $s выхода нет", direction));
+            }
+            ctx.setCurrent(nextRoom);
         });
         commands.put("take", (ctx, a) -> {
             throw new InvalidCommandException("TODO-2: реализуйте взятие предмета");
