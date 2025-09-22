@@ -50,11 +50,19 @@ public class Game {
         });
         commands.put("inventory", (ctx, a) -> {
             StringBuilder sb = new StringBuilder();
-            sb.append("Предметы: ");
-            if (!ctx.getPlayer().getInventory().isEmpty()) {
-                sb.append(String.join(", ", ctx.getPlayer().getInventory().stream().map(Item::getName).toList()));
-            }
-            System.out.println(sb.toString());
+            List<String> potions = ctx.getPlayer().getInventory().stream()
+                .filter(obj -> obj instanceof Potion)
+                .map(Item::getName)
+                .sorted()
+                .collect(Collectors.toList());
+            List<String> weapons = ctx.getPlayer().getInventory().stream()
+                .filter(obj -> obj instanceof Weapon)
+                .map(Item::getName)
+                .sorted()
+                .collect(Collectors.toList());
+            sb.append("Зелья: ").append(String.join(", ", potions)).append("\n");
+            sb.append("Оружие: ").append(String.join(", ", weapons)).append("\n");
+            System.out.print(sb.toString());
         });
         commands.put("use", (ctx, a) -> {
             var itemName = a.getFirst().strip();
