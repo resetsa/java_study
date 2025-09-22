@@ -58,7 +58,14 @@ public class Game {
             System.out.println(sb.toString());
         });
         commands.put("use", (ctx, a) -> {
-            throw new InvalidCommandException("TODO-4: реализуйте использование предмета");
+            var itemName = a.getFirst().strip();
+            var optItem = ctx.getPlayer().getInventory().stream()
+                .filter(i -> i.getName().equals(itemName))
+                .findFirst();
+            if (!optItem.isPresent()) {
+                throw new InvalidCommandException(String.format("Предмет %s на найден", itemName));
+            }
+            optItem.get().apply(ctx);
         });
         commands.put("fight", (ctx, a) -> {
             throw new InvalidCommandException("TODO-5: реализуйте бой");
