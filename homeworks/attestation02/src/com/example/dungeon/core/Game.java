@@ -50,7 +50,12 @@ public class Game {
             ctx.getCurrent().removeItems(items);
         });
         commands.put("inventory", (ctx, a) -> {
-            System.out.println("TODO-3: вывести инвентарь (Streams)");
+            StringBuilder sb = new StringBuilder();
+            sb.append("Предметы: ");
+            if (!ctx.getPlayer().getInventory().isEmpty()) {
+                sb.append(String.join(", ", ctx.getPlayer().getInventory().stream().map(Item::getName).toList()));
+            }
+            System.out.println(sb.toString());
         });
         commands.put("use", (ctx, a) -> {
             throw new InvalidCommandException("TODO-4: реализуйте использование предмета");
