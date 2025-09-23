@@ -85,6 +85,8 @@ public class Game {
             if (monster.getHp() <= 0) {
                 System.out.printf("Монстр %s побежден!%n", monster.getName());
                 ctx.getCurrent().setMonster(null);
+                System.out.printf("Заработано очков %d!%n", monster.getLevel());
+                ctx.addScore(monster.getLevel());
             }
             else {
                 System.out.printf("Вы бьёте %s на %d. HP монстра: %d%n", monster.getName(),player.getAttack(), monster.getHp());
