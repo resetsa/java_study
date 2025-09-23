@@ -45,7 +45,7 @@ public class Game {
             if (items.isEmpty()) {
                 throw new InvalidCommandException(String.format("В комнате нет предмета %s", itemName));
             }
-            ctx.getPlayer().addItems(items);
+            ctx.getPlayer().getInventory().addAll(items);
             ctx.getCurrent().removeItems(items);
         });
         commands.put("inventory", (ctx, a) -> {
@@ -85,6 +85,11 @@ public class Game {
             if (monster.getHp() <= 0) {
                 System.out.printf("Монстр %s побежден!%n", monster.getName());
                 ctx.getCurrent().setMonster(null);
+                if (!monster.getInventory().isEmpty()) {
+                    ctx.getCurrent().getItems().addAll(monster.getInventory());
+                    monster.getInventory().stream()
+                        .forEach(i -> System.out.printf("Из %s выпало %s%n", monster.getName(),i.getName()));
+                }
                 System.out.printf("Заработано очков %d!%n", monster.getLevel());
                 ctx.addScore(monster.getLevel());
             }
@@ -129,6 +134,11 @@ public class Game {
         beach.getItems().add(new Potion("Напиток", 10));
         beach.getItems().add(new Potion("Кола", 5));
         beach.getItems().add(new Weapon("Ружье", 10));
+        List<Item> watermanLoot = new ArrayList<>();
+        watermanLoot.add(new Key("Старый ключ"));
+        var waterman = new Monster("Водяной", 2,10,watermanLoot);
+        System.out.println(waterman);
+        beach.setMonster(waterman);
 
         state.setCurrent(square);
     }
