@@ -74,6 +74,9 @@ public class Game {
             }
             optItem.get().apply(ctx);
         });
+        commands.put("about", (ctx, a) -> {
+            System.out.println("Шаблон игры, для аттестационного задания");
+        });
         commands.put("fight", (ctx, a) -> {
             var monster = ctx.getCurrent().getMonster();
             var player = ctx.getPlayer();
