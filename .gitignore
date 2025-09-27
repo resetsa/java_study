@@ -2,3 +2,6 @@
 *.class
 .vscode/*
 target/
+*.txt
+*.csv
+*.json
