@@ -14,7 +14,6 @@ public class JsonSaver {
         try (BufferedWriter w = Files.newBufferedWriter(save)) 
         {
             objectMapper.writerWithDefaultPrettyPrinter().writeValue(w, ctx);
-            System.out.println("Сохранено в " + save.toAbsolutePath());
         }
         catch (Exception e) {
             throw new InvalidCommandException(e.getMessage());

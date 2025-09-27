@@ -13,6 +13,7 @@ public class SaveLoad {
 
     public static void save(GameState s) {
         JsonSaver.save(s,SAVE);
+        System.out.println("Сохранено в " + SAVE.toAbsolutePath());
         writeScore(s.getPlayer().getName(), s.getScore());
     }
 
@@ -22,6 +23,8 @@ public class SaveLoad {
             return;
         }
         JsonLoader.load(s, SAVE);
+        System.out.println(s.getCurrent().describe());
+        System.out.println("Игра загружена (упрощённо).");
     }
 
     public static void printScores() {

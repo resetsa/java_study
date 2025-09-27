@@ -13,8 +13,6 @@ public class JsonLoader {
         try (BufferedReader r = Files.newBufferedReader(load)) 
         {
             objectMapper.readerForUpdating(ctx).readValue(r, ctx.getClass());
-            System.out.println(ctx.getCurrent().describe());
-            System.out.println("Игра загружена (упрощённо).");
         }
         catch (Exception e) {
             throw new InvalidCommandException(e.getMessage());
