@@ -46,7 +46,7 @@ public class Game {
                 throw new InvalidCommandException(String.format("В комнате нет предмета %s", itemName));
             }
             ctx.getPlayer().getInventory().addAll(items);
-            ctx.getCurrent().removeItems(items);
+            ctx.getCurrent().getItems().removeAll(items);
         });
         commands.put("inventory", (ctx, a) -> {
             StringBuilder sb = new StringBuilder();
@@ -131,13 +131,13 @@ public class Game {
         forest.getItems().add(new Potion("Малое зелье", 5));
         forest.setMonster(new Monster("Волк", 1, 8));
 
+        beach.getNeighbors().put("north", square);
         beach.getItems().add(new Potion("Напиток", 10));
         beach.getItems().add(new Potion("Кола", 5));
         beach.getItems().add(new Weapon("Ружье", 10));
         List<Item> watermanLoot = new ArrayList<>();
         watermanLoot.add(new Key("Старый ключ"));
         var waterman = new Monster("Водяной", 2,10,watermanLoot);
-        System.out.println(waterman);
         beach.setMonster(waterman);
 
         state.setCurrent(square);

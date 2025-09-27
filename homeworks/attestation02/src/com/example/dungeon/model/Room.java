@@ -2,6 +2,10 @@ package com.example.dungeon.model;
 
 import java.util.*;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Room {
     private final String name;
     private final String description;
@@ -9,7 +13,8 @@ public class Room {
     private final List<Item> items = new ArrayList<>();
     private Monster monster;
 
-    public Room(String name, String description) {
+    @JsonCreator
+    public Room(@JsonProperty("name") String name, @JsonProperty("description") String description) {
         this.name = name;
         this.description = description;
     }
@@ -18,16 +23,13 @@ public class Room {
         return name;
     }
 
+    @JsonIgnore
     public Map<String, Room> getNeighbors() {
         return neighbors;
     }
 
     public List<Item> getItems() {
         return items;
-    }
-
-    public void removeItems(List<Item> items) {
-        this.items.removeAll(items);
     }
 
     public Monster getMonster() {
@@ -50,5 +52,9 @@ public class Room {
             sb.append("\nВыходы: ").append(String.join(", ", neighbors.keySet()));
         }
         return sb.toString();
+    }
+
+    public String getDescription() {
+        return description;
     }
 }

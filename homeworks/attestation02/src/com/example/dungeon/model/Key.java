@@ -1,7 +1,12 @@
 package com.example.dungeon.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Key extends Item {
-    public Key(String name) {
+
+    @JsonCreator
+    public Key(@JsonProperty("name") String name) {
         super(name);
     }
 

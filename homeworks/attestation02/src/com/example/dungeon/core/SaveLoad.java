@@ -6,27 +6,14 @@ import java.io.*;
 import java.nio.file.*;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class SaveLoad {
-    private static final Path SAVE = Paths.get("save.txt");
+    private static final Path SAVE = Paths.get("save.json");
     private static final Path SCORES = Paths.get("scores.csv");
 
     public static void save(GameState s) {
-        try (BufferedWriter w = Files.newBufferedWriter(SAVE)) {
-            Player p = s.getPlayer();
-            w.write("player;" + p.getName() + ";" + p.getHp() + ";" + p.getAttack());
-            w.newLine();
-            String inv = p.getInventory().stream().map(i -> i.getClass().getSimpleName() + ":" + i.getName()).collect(Collectors.joining(","));
-            w.write("inventory;" + inv);
-            w.newLine();
-            w.write("room;" + s.getCurrent().getName());
-            w.newLine();
-            System.out.println("Сохранено в " + SAVE.toAbsolutePath());
-            writeScore(p.getName(), s.getScore());
-        } catch (IOException e) {
-            throw new UncheckedIOException("Не удалось сохранить игру", e);
-        }
+        JsonSaver.save(s,SAVE);
+        writeScore(s.getPlayer().getName(), s.getScore());
     }
 
     public static void load(GameState s) {
@@ -34,34 +21,7 @@ public class SaveLoad {
             System.out.println("Сохранение не найдено.");
             return;
         }
-        try (BufferedReader r = Files.newBufferedReader(SAVE)) {
-            Map<String, String> map = new HashMap<>();
-            for (String line; (line = r.readLine()) != null; ) {
-                String[] parts = line.split(";", 2);
-                if (parts.length == 2) map.put(parts[0], parts[1]);
-            }
-            Player p = s.getPlayer();
-            String[] pp = map.getOrDefault("player", "player;Hero;10;3").split(";");
-            p.setName(pp[1]);
-            p.setHp(Integer.parseInt(pp[2]));
-            p.setAttack(Integer.parseInt(pp[3]));
-            p.getInventory().clear();
-            String inv = map.getOrDefault("inventory", "");
-            if (!inv.isBlank()) for (String tok : inv.split(",")) {
-                String[] t = tok.split(":", 2);
-                if (t.length < 2) continue;
-                switch (t[0]) {
-                    case "Potion" -> p.getInventory().add(new Potion(t[1], 5));
-                    case "Key" -> p.getInventory().add(new Key(t[1]));
-                    case "Weapon" -> p.getInventory().add(new Weapon(t[1], 3));
-                    default -> {
-                    }
-                }
-            }
-            System.out.println("Игра загружена (упрощённо).");
-        } catch (IOException e) {
-            throw new UncheckedIOException("Не удалось загрузить игру", e);
-        }
+        JsonLoader.load(s, SAVE);
     }
 
     public static void printScores() {

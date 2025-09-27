@@ -1,11 +1,19 @@
 package com.example.dungeon.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Potion extends Item {
     private final int heal;
 
-    public Potion(String name, int heal) {
+    @JsonCreator
+    public Potion(@JsonProperty("name") String name, @JsonProperty("heal") int heal) {
         super(name);
         this.heal = heal;
+    }
+
+    public int getHeal() {
+        return heal;
     }
 
     @Override
