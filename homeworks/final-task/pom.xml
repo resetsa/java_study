@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.resetsa.homeworks</groupId>
+    <artifactId>final-task</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <flyway.version>9.22.3</flyway.version>
+        <postgresql.version>42.6.0</postgresql.version>
+        <db.user>app_user</db.user>
+        <db.password>Hsij9w7sam</db.password>
+        <db.name>app_db</db.name>
+
+
+    </properties>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${postgresql.version}</version>
+        </dependency>
+
+    </dependencies>
+
+<build>
+    <plugins>
+        <plugin>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-maven-plugin</artifactId>
+            <version>${flyway.version}</version>
+            <configuration>
+                <url>jdbc:postgresql://localhost:5432/${db.name}</url>
+                <user>${db.user}</user>
+                <password>${db.password}</password>
+                <locations>
+                    <location>filesystem:src/main/resources/db/migration</location>
+                </locations>
+            </configuration>
+            <dependencies>
+                <!-- Драйвер PostgreSQL для плагина -->
+                <dependency>
+                    <groupId>org.postgresql</groupId>
+                    <artifactId>postgresql</artifactId>
+                    <version>${postgresql.version}</version>
+                </dependency>
+            </dependencies>
+            <executions>
+                <execution>
+                    <id>flyway-migrate</id>
+                    <goals>
+                        <goal>migrate</goal>
+                    </goals>
+                    <phase>process-resources</phase> <!-- Example phase for execution -->
+                </execution>
+            </executions>
+        </plugin>
+    </plugins>
+</build>
+
+</project>
